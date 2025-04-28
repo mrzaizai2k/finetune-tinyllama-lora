@@ -1,21 +1,49 @@
-# finetune-tinyllama-lora
-finetune tiny llama
+# Finetune-TinyLlama-LoRA
 
+Fine-tune TinyLlama with LoRA using PEFT.
 
-## Question 1: Data Analysis and Model Training
-- **Data Analysis**:
-  - Created `emotion_eda.ipynb` to analyze the dataset.
-  - Due to time constraints, unable to train on full data or generate additional data.
-  - Removed data to ensure `max_seq_length` and dataset balance.
-- **Model Training**:
-  - Trained the model using LoRA in `assessment.py`.
-  - Training one model for 5 epochs took 20 minutes due to time limitations.
-  - With more time, I would:
-    - Search for optimal hyperparameters using tools like Weights & Biases (WandB) or other MLOps methods to log experiments and select the best model.
-    - Generate additional data using another model to ensure data balance instead of removing data.
-    - Add logs and configuration files for better experiment tracking.
-- **Model Comparison**:
-  - Comparison between base and fine-tuned models is in `test.ipynb`.
-  - Used `TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T` as the base model.
-  - Noted that comparing with this base model is unfair since it is a foundation model not designed to handle queries directly, leading to 0 accuracy for the classification task.
-  - The base model is intended for further fine-tuning, not standalone use.
+## Setup
+
+```bash
+conda create -n tinyllama python=3.10
+conda activate tinyllama
+pip install -r setup.txt
+```
+
+## Data
+
+The dataset used is [dair-ai/emotion](https://huggingface.co/datasets/dair-ai/emotion), converted to Alpaca format:
+
+```json
+[
+  {
+    "instruction": "Classify the emotion in this tweet:",
+    "input": "i feel disheartened or defeated",
+    "output": "sadness"
+  }
+]
+```
+
+## Data Analysis and Model Training
+
+### Data Analysis
+- Created `emotion_eda.ipynb` for dataset analysis.
+- Due to time constraints, could not train on the full dataset or generate additional data.
+- Removed data to balance the dataset and ensure compatibility with `max_seq_length`.
+
+### Model Training
+- Trained the model using LoRA in `train.py`.
+- Training for 5 epochs took 20 minutes due to time limitations.
+- With more time, I would:
+  - Perform hyperparameter optimization using tools like Weights & Biases (WandB) or other MLOps methods for experiment logging and model selection.
+  - Generate additional data with another model to balance the dataset instead of removing data.
+  - Add logs and configuration files for improved experiment tracking.
+
+### Model Comparison
+- Comparison between base and fine-tuned models is in `compare_performance.ipynb`.
+- Used `TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T` as the base model.
+- Note: Comparing with this base model is unfair as it is a foundation model not designed for direct query handling, resulting in 0 accuracy for the classification task.
+- The base model is intended for further fine-tuning, not standalone use.
+
+## Reference
+- [Alpaca Fine-Tuning Guide](https://www.mlexpert.io/blog/alpaca-fine-tuning)
